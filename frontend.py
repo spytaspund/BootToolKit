@@ -15,7 +15,7 @@ class MainWindow(FluentWindow):
     def __init__(self):
         super().__init__()
         setTheme(Theme.DARK)
-        self.setWindowTitle("BootResize")
+        self.setWindowTitle("BootToolKit")
         self.setWindowIcon(QIcon('./assets/appicon.png'))
         self.setFixedSize(506, 320)
         self.navigationInterface.setExpandWidth(160)
