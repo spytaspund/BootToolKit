@@ -7,7 +7,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QFrame, QHBoxLayout
 
 filePath = str(os.path.dirname(__file__))
 
-def zip_directory(path, zip_file_handle):
+def zipDirectory(path, zip_file_handle):
     for root, _dirs, files in os.walk(path):
         for file in files:
             zip_file_handle.write(os.path.join(root, file), os.path.relpath(os.path.join(root, file), os.path.join(path, '..')))
@@ -28,18 +28,15 @@ def getAllLinesNumber(path):
         number = number + countFilesInDir(path + "/part" + str(i))
     return number
 
-def openBootAnim(parent):
+def openBootAnim():
     fileName = crossfiledialog.open_file()
-    if str(fileName).endswith(".zip") != True:
+    if str(fileName).endswith(".zip") == False:
         fileName = "notazip"
         return fileName
-    # do not forget to return filename
     with zipfile.ZipFile(fileName) as zipf:
         shutil.rmtree(filePath + "/temp")
         zipf.extractall(filePath + "/temp")
-    try:
-        desc = open(filePath + "/temp/desc.txt", "r") # in case zip is not a boot anim
-    except FileNotFoundError:
+    if os.path.isfile(filePath + "/temp/desc.txt") == False:
         fileName = "nodesc"
     return fileName
 
@@ -95,6 +92,6 @@ def resizeAnimation(baseHeight, baseWidth, targetHeight, targetWidth, pbar):
     # zip it up
     with zipfile.ZipFile(savePath, "w", zipfile.ZIP_STORED) as zipf:
         for part in range(0, numparts):
-            zip_directory(filePath + "/temp/part" + str(part), zipf)
+            zipDirectory(filePath + "/temp/part" + str(part), zipf)
             pbar.setValue(pbar.value() + 25)
         zipf.write(filePath + "/temp/desc.txt", "desc.txt")
